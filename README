@@ -1,0 +1,23 @@
+KrackedForc is a python based tank game.
+
+##############
+REQUIREMENTS
+##############
+
+python 2.6.x
+http://python.org/
+
+pyglet 1.1.4
+http://pyglet.org/
+
+lepton 1.0b2
+http://code.google.com/p/py-lepton/
+
+rabbyt
+http://pypi.python.org/pypi/Rabbyt/
+
+################
+PLAY
+################
+
+python -O game.py

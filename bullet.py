@@ -33,12 +33,19 @@ class Bullet(rabbyt.Sprite):
         player_collisions = rabbyt.collisions.aabb_collide_single(self, self.world.player_objects)
         
         
-        if map_collisions or player_collisions:
+        if player_collisions:
             if self.tank not in player_collisions:
                 Explosion(self.x, self.y)
+                self.tank.score += 1
                 self.tank.bullet_list.remove(self)
                 del(self)
                 return
+        
+        if map_collisions:
+            Explosion(self.x, self.y)
+            self.tank.bullet_list.remove(self)
+            del(self)
+            return
         
         if self.x < 0 or self.y < 0:
             self.tank.bullet_list.remove(self)

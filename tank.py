@@ -36,8 +36,9 @@ class TankTurret(rabbyt.Sprite):
 
 class Tank(object):
      
-    def __init__(self, turret, base, x, y):
+    def __init__(self, name, turret, base, x, y):
        
+        self.name = name
         self.world = None
         self.t = TankTurret(turret)
         self.t.xy = (x, y)
@@ -58,8 +59,7 @@ class Tank(object):
         self.x = self.b.x
         self.y = self.b.y
         
-        self.top = float(self.top)
-
+        self.score = 0
     
     def render(self):
         """

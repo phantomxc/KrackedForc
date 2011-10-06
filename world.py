@@ -1,7 +1,7 @@
 import rabbyt
 from lepton import default_system
 from pyglet.window import key, Window
-from pyglet import resource
+from pyglet import resource, text
 
 
 class World(object):
@@ -22,7 +22,7 @@ class World(object):
             key.SPACE: ('fire', '')
         }
 
-        self.window = Window(width=1280, height=768)
+        self.window = Window(width=1300, height=768)
         self.window.push_handlers(self.keys)
 
         self.addPlayer(player1)
@@ -49,6 +49,26 @@ class World(object):
                 action = self.input[k][0]
                 arg = self.input[k][1]
                 self.p1.action(action, arg, dt)
+
+
+    def displayScore(self):
+        """
+        Render the score for the players
+        """
+        x_start = 1250
+        y_start = 750
+        labels = []
+        for p in self.player_objects:
+            y_start -= 25
+            score = '%s : %s' % (p.name, p.score)
+            label = text.Label(score,
+                font_name='Times New Roman',
+                font_size=12,
+                x=x_start, y=y_start,
+                anchor_x='center', anchor_y='center')
+            labels.append(label)
+        for l in labels:
+            l.draw()
 
 
 

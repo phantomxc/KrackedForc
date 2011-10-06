@@ -19,8 +19,8 @@ glDisable(GL_DEPTH_TEST)
 #----------------------------------
 # CREATE THE PLAYER THEN THE WORLD
 #----------------------------------
-tank = Tank('tanktop', 'tankbot', 100, 100)
-tank2 = Tank('tanktop', 'tankbot', 700, 700)
+tank = Tank('PhantomXC', 'tanktop', 'tankbot', 100, 100)
+tank2 = Tank('Robot', 'tanktop', 'tankbot', 700, 700)
 world = World(tank)
 world.selectLevel('city1')
 
@@ -62,6 +62,7 @@ def on_draw():
     for obj in world.player_objects:
         obj.render()
 
+    world.displayScore()
 
     glLoadIdentity()
     default_system.draw()

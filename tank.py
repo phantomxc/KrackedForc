@@ -179,18 +179,19 @@ class Tank(object):
 
         a = [0.0,0.0]
 
+        a[0] += cos(radians(bot.rot+90))*.9
+        a[1] += sin(radians(bot.rot+90))*.9
+
+        ff = .5 # Friction Factor
+
+        self.velocity[0] *= ff
+        self.velocity[1] *= ff
+
+        self.velocity[0] += a[0]
+        self.velocity[1] += a[1]
+
         if direction == 'up':
             if not bot.front_coll:
-                a[0] += cos(radians(bot.rot+90))*.9
-                a[1] += sin(radians(bot.rot+90))*.9
-
-                ff = .5 # Friction Factor
-
-                self.velocity[0] *= ff
-                self.velocity[1] *= ff
-
-                self.velocity[0] += a[0]
-                self.velocity[1] += a[1]
 
                 bot.x += self.velocity[0]
                 bot.y += self.velocity[1]
@@ -201,16 +202,6 @@ class Tank(object):
 
         elif direction == 'down':
             
-            a[0] += cos(radians(bot.rot+90))*.9
-            a[1] += sin(radians(bot.rot+90))*.9
-
-            ff = .5 # Friction Factor
-
-            self.velocity[0] *= ff
-            self.velocity[1] *= ff
-
-            self.velocity[0] += a[0]
-            self.velocity[1] += a[1]
 
             bot.x -= self.velocity[0]
             bot.y -= self.velocity[1]
@@ -218,6 +209,7 @@ class Tank(object):
             top.y -= self.velocity[1]
             self.x -= self.velocity[0]
             self.y -= self.velocity[1]
+
         self.top = self.b.top
         self.left = self.b.left
         self.right = self.b.right

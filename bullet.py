@@ -6,10 +6,10 @@ import rabbyt
 
 class Bullet(rabbyt.Sprite):
     
-    def __init__(self, name, x, y, tank):
+    def __init__(self, name, x, y, tank, left, top, right, bottom):
         
         #10 X 26
-        rabbyt.Sprite.__init__(self, 'images/'+name+'.png', (-5, 13, 5, -13))
+        rabbyt.Sprite.__init__(self, 'images/'+name+'.png', (left, top, right, bottom))
         self.x = x
         self.y = y
         self.dead = False
@@ -32,14 +32,18 @@ class Bullet(rabbyt.Sprite):
         map_collisions = rabbyt.collisions.aabb_collide_single(self, self.world.map_objects)
         player_collisions = rabbyt.collisions.aabb_collide_single(self, self.world.player_objects)
         
-        
+        if self.tank in player_collisions:
+            player_collisions.remove(self.tank)
+
         if player_collisions:
-            if self.tank not in player_collisions:
-                Explosion(self.x, self.y)
+            Explosion(self.x, self.y)
+            player_hit = player_collisions[0]
+            player_hit.health -= self.dmg
+            if player_hit.health <= 0:
                 self.tank.score += 1
-                self.tank.bullet_list.remove(self)
-                del(self)
-                return
+            self.tank.bullet_list.remove(self)
+            del(self)
+            return
         
         if map_collisions:
             Explosion(self.x, self.y)
@@ -57,4 +61,42 @@ class Bullet(rabbyt.Sprite):
 
         else:
             rabbyt.Sprite.render(self)
+
+
+
+
+class BlueBullet(Bullet):
+    
+    def __init__(self, x, y, tank):
+        """
+        stuff
+        """
+        name = 'bluebullet'
+        left = -5
+        top = 13
+        right = 5
+        bottom = -13
+
+        self.dmg = 50
+        self.load_time = 1.5
+
+        super(BlueBullet, self).__init__(name, x, y, tank, left, top, right, bottom)
+
+
+class RedBullet(Bullet):
+    
+    def __init__(self, x, y, tank):
+        """
+        stuff
+        """
+        name = 'redbullet'
+        left = -5
+        top = 13
+        right = 5
+        bottom = -13
+
+        self.dmg = 25
+        self.load_time = .75
+
+        super(RedBullet, self).__init__(name, x, y, tank, left, top, right, bottom)
 

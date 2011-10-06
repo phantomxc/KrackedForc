@@ -2,7 +2,7 @@ import rabbyt
 
 from pyglet import clock
 from math import cos, sin, radians
-from bullet import Bullet
+from bullet import BlueBullet, RedBullet
 
 class TankBase(rabbyt.Sprite):
 
@@ -60,7 +60,12 @@ class Tank(object):
         self.y = self.b.y
         
         self.score = 0
-    
+        self.health = 100
+        self.weapons = [BlueBullet, RedBullet]
+        self.active_weapon = BlueBullet
+
+
+
     def render(self):
         """
         Render this sprite
@@ -72,24 +77,49 @@ class Tank(object):
         for b in self.bullet_list:
             b.render()
 
-    
-    def action(self, action, direction, dt):
+        if self.health <= 0:
+            self.die()
+
+
+
+    def die(self):
         """
-        Determine what movements the tank needs to make.
+        Add stuff for when this tank goes below 100 health
+        """
+        self.health = 100
+
+
+
+    def action(self, action, arg, dt):
+        """
+        Bind key actions to the tank
         """
         if action == 'move':
-             self.move(direction, dt)
+             self.move(arg, dt)
 
         elif action == 'rotate':
-            self.rotate(direction, dt)
+            self.rotate(arg, dt)
 
         elif action == 'turret':
-            self.turretRotate(direction, dt)
+            self.turretRotate(arg, dt)
 
         elif action == 'fire':
             self.fire(dt)
+
+        elif action == 'change':
+            self.changeWeapon(arg)
     
     
+    def changeWeapon(self, num):
+        """
+        change the active weapon selected
+        """
+        try:
+            self.active_weapon = self.weapons[num]
+        except:
+            pass
+
+
     def fire(self, dt):
         """
         fire a bullet
@@ -100,11 +130,11 @@ class Tank(object):
             bullet_x = self.t.x + sin(angle_radians)
             bullet_y = self.t.y + cos(angle_radians)
 
-            bullet = Bullet('bullet', bullet_x, bullet_y, self)
+            bullet = self.active_weapon(bullet_x, bullet_y, self)
             bullet.rot = self.t.rot
             self.bullet_list.append(bullet)
             self.reload = True
-            clock.schedule_once(self.reloadComplete, 1.5)
+            clock.schedule_once(self.reloadComplete, bullet.load_time)
 
 
     def reloadComplete(self, dt):

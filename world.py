@@ -19,7 +19,11 @@ class World(object):
             key.D : ('rotate', 'right'),
             key.LEFT : ('turret', 'left'),
             key.RIGHT: ('turret', 'right'),
-            key.SPACE: ('fire', '')
+            key.SPACE: ('fire', ''),
+            key._1: ('change', 0),
+            key._2: ('change', 1),
+            key._3: ('change', 2),
+            key._4: ('change', 3)
         }
 
         self.window = Window(width=1300, height=768)
@@ -55,7 +59,7 @@ class World(object):
         """
         Render the score for the players
         """
-        x_start = 1250
+        x_start = 1200
         y_start = 750
         labels = []
         for p in self.player_objects:
@@ -65,7 +69,7 @@ class World(object):
                 font_name='Times New Roman',
                 font_size=12,
                 x=x_start, y=y_start,
-                anchor_x='center', anchor_y='center')
+                )
             labels.append(label)
         for l in labels:
             l.draw()

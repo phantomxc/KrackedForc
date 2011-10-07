@@ -21,7 +21,7 @@ player_details = {}
 while True:
     time.sleep(0.016)
     
-    send(player_list)
+    send(player_details)
 
     try:
         msg = pull_socket.recv_pyobj(flags=zmq.core.NOBLOCK)
@@ -30,14 +30,9 @@ while True:
     else:
         if msg['cmd'] == 'new':
             player = util.unpickle(msg['player'])
-            if player not in player_list:
-                player_list.append(player)
+            player_details[player.name] = player
         elif msg['cmd'] == 'update':
             player = util.unpickle(msg['player'])
-            try:
-                player_list.remove(player)
-                player_list.append(player)
-            except:
-                pass
+            player_details[player.name] = player
             
 

@@ -24,19 +24,11 @@ glDisable(GL_DEPTH_TEST)
 # CREATE THE PLAYER THEN THE WORLD
 #----------------------------------
 tank = Player('PhantomXC', 'tanktop', 'tankbot', 100, 100)
-tank2 = Player('Robot', 'tanktop', 'tankbot', 700, 700)
 world = World()
 world.connectServer()
 world.selectLevel('city1')
 
 world.addPlayer(tank, main=True)
-world.addPlayer(tank2)
-
-for x in range(100):
-    tank2.move('down', x)
-
-for x in range(50):
-    tank2.rotate('left', x)
 
 #---------------------------------------------------
 # RABBYT THAT NEEDS TO HAPPEN AFTER WORLD GENERATION

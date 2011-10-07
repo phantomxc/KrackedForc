@@ -5,6 +5,7 @@ from pyglet import resource, text
 import zmq 
 import sys 
 import util
+from player import Player
 
 
 class World(object):
@@ -146,16 +147,16 @@ class World(object):
             to = msg[0:sep]
             foreign = util.unpickle(msg[sep+1:])
 
-            for f in foreign:
-                if f.name == self.p1.mini.name:
-                    foreign.remove(f)
+            for n, obj in foreign.items():
+                if n == self.p1.mini.name:
+                    del foreign[n]
 
             self.moveOthers(foreign)
 
 
     def moveOthers(self, foreign):
 
-        for mini in foreign:
+        for name, mini in foreign.items():
             p = self.getPlayer(mini)
             p.updateFromMini(mini)
 

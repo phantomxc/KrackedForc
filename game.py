@@ -1,4 +1,4 @@
-from tank import Tank
+from player import Player
 from lepton import default_system
 from world import World
 
@@ -6,6 +6,10 @@ import rabbyt
 import os
 from pyglet import clock, image, app, resource
 from pyglet.gl import *
+import zmq
+import sys
+
+global sub_socket
 
 #---------------------------------------
 #OPEN GL STUFF THAT HARDLY MAKES SENSE
@@ -19,11 +23,13 @@ glDisable(GL_DEPTH_TEST)
 #----------------------------------
 # CREATE THE PLAYER THEN THE WORLD
 #----------------------------------
-tank = Tank('PhantomXC', 'tanktop', 'tankbot', 100, 100)
-tank2 = Tank('Robot', 'tanktop', 'tankbot', 700, 700)
-world = World(tank)
+tank = Player('PhantomXC', 'tanktop', 'tankbot', 100, 100)
+tank2 = Player('Robot', 'tanktop', 'tankbot', 700, 700)
+world = World()
+world.connectServer()
 world.selectLevel('city1')
 
+world.addPlayer(tank, main=True)
 world.addPlayer(tank2)
 
 for x in range(100):
@@ -50,7 +56,6 @@ fps_display = clock.ClockDisplay()
 @world.window.event
 def on_draw():
     world.window.clear()
-    
     #render your bg here if you want to see the shapes
     #world.bgimage.blit(0,0)
     

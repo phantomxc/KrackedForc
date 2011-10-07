@@ -80,8 +80,7 @@ class Tank(object):
         if self.health <= 0:
             self.die()
 
-
-
+    
     def die(self):
         """
         Add stuff for when this tank goes below 100 health

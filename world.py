@@ -2,16 +2,19 @@ import rabbyt
 from lepton import default_system
 from pyglet.window import key, Window
 from pyglet import resource, text
+import zmq 
+import sys 
+import util
 
 
 class World(object):
 
-    def __init__(self, player1):
+    def __init__(self):
 
-        self.p1 = player1
         self.keys = key.KeyStateHandler()
         self.map_objects = []
         self.player_objects = []
+        self.mini_objects = []
         self.input = {
             key.W : ('move', 'up'),
             key.A : ('rotate', 'left'),
@@ -29,25 +32,37 @@ class World(object):
         self.window = Window(width=1300, height=768)
         self.window.push_handlers(self.keys)
 
-        self.addPlayer(player1)
 
 
-
-    def addPlayer(self, player):
+    def addPlayer(self, player, main=False):
         """
         add a player to the player list
         """
+        if main:
+            self.p1 = player
         player.world = self
         self.player_objects.append(player)
+        self.mini_objects.append(player.mini)
+        player.send('new')
 
+    def addPlayerFromMini(self, mini):
+        """
+        what the title says
+        """
+        p = Player(mini.name, 'tanktop', 'tankbot', mini.x, mini.y)
+        self.addPlayer(p)
 
 
     def gameUpdate(self, dt):
         """
         To be called every Tick
         """
+
+        self.recvServer()
+
         rabbyt.add_time(dt)
         default_system.update(dt)
+
         for k, k_pressed in self.keys.iteritems():
             if k_pressed and k in self.input:
                 action = self.input[k][0]
@@ -62,7 +77,7 @@ class World(object):
         x_start = 1200
         y_start = 750
         labels = []
-        for p in self.player_objects:
+        for p in self.mini_objects:
             y_start -= 25
             score = '%s : %s' % (p.name, p.score)
             label = text.Label(score,
@@ -103,4 +118,63 @@ class World(object):
         
         levels = {'city1':city1}
         return levels[name]
+
+    
+    def connectServer(self):
+        context = zmq.Context()
+
+        # Socket to receive broadcasts from server
+        self.sub_socket = context.socket(zmq.SUB)
+        self.sub_socket.connect("tcp://localhost:5556")
+        self.sub_socket.setsockopt(zmq.SUBSCRIBE, "all")
+        print "Connecting to server ...",
+        sys.stdout.flush()
+        self.sub_socket.recv()  # Will hang forever if no server.
+        
+        self.push_socket = context.socket(zmq.PUSH) 
+        self.push_socket.connect("tcp://localhost:5555") 
+
+
+
+    def recvServer(self):
+        try:
+            msg = self.sub_socket.recv(flags=zmq.core.NOBLOCK)
+        except zmq.core.error.ZMQError:
+            pass
+        else:
+            sep = msg.find(':')
+            to = msg[0:sep]
+            foreign = util.unpickle(msg[sep+1:])
+
+            for f in foreign:
+                if f.name == self.p1.mini.name:
+                    foreign.remove(f)
+
+            self.moveOthers(foreign)
+
+
+    def moveOthers(self, foreign):
+
+        for mini in foreign:
+            p = self.getPlayer(mini)
+            p.updateFromMini(mini)
+
+
+
+    def getPlayer(self, mini):
+        player_names = [p.name for p in self.player_objects]
+        if mini.name not in player_names:
+            self.addPlayerFromMini(mini)
+        for player in self.player_objects:
+            if player.name == mini.name:
+                return player
+        
+            
+
+
+
+
+
+
+
 

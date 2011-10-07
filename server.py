@@ -33,6 +33,7 @@ while True:
             player_details[player.name] = player
         elif msg['cmd'] == 'update':
             player = util.unpickle(msg['player'])
+            del player_details[player.name]
             player_details[player.name] = player
             
 

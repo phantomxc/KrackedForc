@@ -150,6 +150,9 @@ class World(object):
             for n, obj in foreign.items():
                 if n == self.p1.mini.name:
                     del foreign[n]
+                else:
+                    print obj.name
+                    print obj.x
 
             self.moveOthers(foreign)
 

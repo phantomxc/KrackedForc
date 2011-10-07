@@ -58,9 +58,7 @@ class World(object):
         """
         To be called every Tick
         """
-
         self.recvServer()
-
         rabbyt.add_time(dt)
         default_system.update(dt)
 
@@ -150,9 +148,6 @@ class World(object):
             for n, obj in foreign.items():
                 if n == self.p1.mini.name:
                     del foreign[n]
-                else:
-                    print obj.name
-                    print obj.x
 
             self.moveOthers(foreign)
 

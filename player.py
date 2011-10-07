@@ -29,16 +29,17 @@ class Player(Tank):
         Depending upon the command, you will likely need additional named arguments.
         All named arguments will get passed through to the server.
         """
-        if self.world.p1 != self:
-            cmd_dict = {
-                'cmd':command,
-                'player':pickle(self.mini)
-            }
-            cmd_dict.update(kwargs)
+        cmd_dict = {
+            'cmd':command,
+            'player':pickle(self.mini)
+        }
+        cmd_dict.update(kwargs)
+        if self.world.p1 == self:
             self.world.push_socket.send_pyobj(cmd_dict)
 
     
     def updateFromMini(self, mini):
-        mini.y += 0.33
         for a, value in mini.__dict__.iteritems():
             setattr(self, a, value)
+        self.updateFromPlayer()
+

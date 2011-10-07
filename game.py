@@ -48,6 +48,7 @@ fps_display = clock.ClockDisplay()
 @world.window.event
 def on_draw():
     world.window.clear()
+
     #render your bg here if you want to see the shapes
     #world.bgimage.blit(0,0)
     

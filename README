@@ -19,5 +19,8 @@ http://pypi.python.org/pypi/Rabbyt/
 ################
 PLAY
 ################
+start the server...
+python server.py
 
+start the game....
 python -O game.py

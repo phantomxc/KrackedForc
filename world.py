@@ -12,26 +12,11 @@ class World(object):
 
     def __init__(self):
 
-        self.keys = key.KeyStateHandler()
         self.map_objects = []
         self.player_objects = []
+        self.players = {}
         self.mini_objects = []
-        self.input = {
-            key.W : ('move', 'up'),
-            key.A : ('rotate', 'left'),
-            key.S : ('move', 'down'),
-            key.D : ('rotate', 'right'),
-            key.LEFT : ('turret', 'left'),
-            key.RIGHT: ('turret', 'right'),
-            key.SPACE: ('fire', ''),
-            key._1: ('change', 0),
-            key._2: ('change', 1),
-            key._3: ('change', 2),
-            key._4: ('change', 3)
-        }
-
         self.window = Window(width=1300, height=768)
-        self.window.push_handlers(self.keys)
 
 
 
@@ -41,8 +26,12 @@ class World(object):
         """
         if main:
             self.p1 = player
+            self.p1.keys = key.KeyStateHandler()
+            self.window.push_handlers(self.p1.keys)
+
         player.world = self
-        self.player_objects.append(player)
+
+        self.players[player.name] = player
         self.mini_objects.append(player.mini)
         player.send('new')
 
@@ -50,7 +39,7 @@ class World(object):
         """
         what the title says
         """
-        p = Player(mini.name, 'tanktop', 'tankbot', mini.x, mini.y)
+        p = Player(mini.name, 'tanktop', 'tankbot')
         self.addPlayer(p)
 
 
@@ -62,11 +51,12 @@ class World(object):
         rabbyt.add_time(dt)
         default_system.update(dt)
 
-        for k, k_pressed in self.keys.iteritems():
-            if k_pressed and k in self.input:
-                action = self.input[k][0]
-                arg = self.input[k][1]
-                self.p1.action(action, arg, dt)
+        for name, po in self.players.items():
+            for k, k_pressed in po.keys.iteritems():
+                if k_pressed and k in po.input:
+                    action = po.input[k][0]
+                    arg = po.input[k][1]
+                    po.action(action, arg, dt)
 
 
     def displayScore(self):
@@ -149,10 +139,10 @@ class World(object):
                 if n == self.p1.mini.name:
                     del foreign[n]
 
-            self.moveOthers(foreign)
+            self.updatePlayers(foreign)
 
 
-    def moveOthers(self, foreign):
+    def updatePlayers(self, foreign):
 
         for name, mini in foreign.items():
             p = self.getPlayer(mini)
@@ -161,12 +151,10 @@ class World(object):
 
 
     def getPlayer(self, mini):
-        player_names = [p.name for p in self.player_objects]
-        if mini.name not in player_names:
+        try:
+            return self.players[mini.name]
+        except:
             self.addPlayerFromMini(mini)
-        for player in self.player_objects:
-            if player.name == mini.name:
-                return player
         
             
 

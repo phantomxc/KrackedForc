@@ -57,7 +57,7 @@ def on_draw():
     
     world.bgimage.blit(0,0)
     
-    for obj in world.player_objects:
+    for n, obj in world.players.items():
         obj.render()
 
     world.displayScore()

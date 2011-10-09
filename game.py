@@ -23,7 +23,7 @@ glDisable(GL_DEPTH_TEST)
 #----------------------------------
 # CREATE THE PLAYER THEN THE WORLD
 #----------------------------------
-tank = Player('PhantomXC', 'tanktop', 'tankbot', 100, 100)
+tank = Player('Mac', 'tanktop', 'tankbot', 100, 100)
 world = World()
 world.connectServer()
 world.selectLevel('city1')

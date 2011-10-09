@@ -64,15 +64,6 @@ class Tank(object):
         self.weapons = [BlueBullet, RedBullet]
         self.active_weapon = BlueBullet
 
-    def updateFromPlayer(self):
-        self.b.x = self.x
-        self.b.y = self.y
-        self.b.rot = self.brot
-
-        self.t.x = self.x
-        self.t.y = self.y
-        self.t.rot = self.trot
-
     def render(self):
         """
         Render this sprite

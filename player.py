@@ -32,8 +32,6 @@ class Player(Tank):
 
         self.mini.miniUpdate(health=self.health, score=self.score, keys=self.keys)
         super(Player, self).render()
-        self.send('update')
-
 
 
     def send(self, command, **kwargs):
@@ -57,5 +55,4 @@ class Player(Tank):
     def updateFromMini(self, mini):
         for a, value in mini.__dict__.iteritems():
             setattr(self, a, value)
-        self.updateFromPlayer()
 

@@ -57,6 +57,8 @@ class World(object):
                     action = po.input[k][0]
                     arg = po.input[k][1]
                     po.action(action, arg, dt)
+                    if po == self.p1:
+                        self.p1.send('update')
 
 
     def displayScore(self):
@@ -127,7 +129,7 @@ class World(object):
 
     def recvServer(self):
         try:
-            msg = self.sub_socket.recv(flags=zmq.core.NOBLOCK)
+            msg = self.sub_socket.recv()
         except zmq.core.error.ZMQError:
             pass
         else:
@@ -155,6 +157,7 @@ class World(object):
             return self.players[mini.name]
         except:
             self.addPlayerFromMini(mini)
+            return self.players[mini.name]
         
             
 

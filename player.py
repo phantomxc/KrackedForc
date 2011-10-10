@@ -36,7 +36,7 @@ class Player(Tank):
         super(Player, self).render()
 
 
-    def send(self, command, **kwargs):
+    def send(self, dt, command='update', **kwargs):
         """
         Send information to the server.
 
@@ -59,6 +59,8 @@ class Player(Tank):
         for k in del_keys:
             if k in mini.keys.keys():
                 del mini.keys[k]
+        print mini.bx
+        print self.b.x
         self.keys = mini.keys
         self.b.x = mini.bx
         self.b.y = mini.by
@@ -66,7 +68,7 @@ class Player(Tank):
 
         self.t.x = mini.tx
         self.t.y = mini.ty
-        self.t.rot = mini.rot
+        self.t.rot = mini.trot
 
         #for a, value in mini.__dict__.iteritems():
         #setattr(self, a, value)

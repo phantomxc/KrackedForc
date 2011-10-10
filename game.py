@@ -68,6 +68,7 @@ def on_draw():
 
 if __name__=='__main__':
     clock.schedule(world.gameUpdate)
+    clock.schedule_interval(world.p1.send, 1.0/30)
     app.run()
 
 

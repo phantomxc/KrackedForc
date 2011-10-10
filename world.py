@@ -34,7 +34,7 @@ class World(object):
 
         self.players[player.name] = player
         self.mini_objects.append(player.mini)
-        player.send('new')
+        player.send(0, 'new')
 
     def addPlayerFromMini(self, mini):
         """
@@ -60,17 +60,6 @@ class World(object):
                     action = po.input[k][0]
                     arg = po.input[k][1]
                     po.action(action, arg, dt)
-                    if po == self.p1:
-                        self.stop_update = True
-                        self.p1.send('update')
-                else:
-                    delete_keys.append(k)
-                    if self.stop_update:
-                        self.stop_update = False
-                        self.p1.send('update_stop')
-
-            for k in delete_keys:
-                del po.keys[k]
             
     def displayScore(self):
         """

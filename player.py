@@ -31,7 +31,9 @@ class Player(Tank):
         self.mini.miniUpdate(
             health=self.health, score=self.score, keys=self.keys,
             bx=self.b.x, by=self.b.y, brot=self.b.rot,
-            tx=self.t.x, ty=self.t.y, trot=self.t.rot
+            tx=self.t.x, ty=self.t.y, trot=self.t.rot,
+            left=self.b.left, right=self.b.right,
+            top=self.b.top, bottom=self.b.bottom
         )
         super(Player, self).render()
 

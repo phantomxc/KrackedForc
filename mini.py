@@ -15,6 +15,11 @@ class miniPlayer(object):
         self.ty = 0
         self.trot = 0
 
+        self.left = 0
+        self.right = 0
+        self.top = 0
+        self.bottom = 0
+
         self.health = 100
         self.score = 0
         self.keys = keys

@@ -17,6 +17,7 @@ class World(object):
         self.players = {}
         self.mini_objects = []
         self.window = Window(width=1300, height=768)
+        self.stop_update = False
 
 
 
@@ -50,17 +51,27 @@ class World(object):
         self.recvServer()
         rabbyt.add_time(dt)
         default_system.update(dt)
+        
 
         for name, po in self.players.items():
+            delete_keys=[]
             for k, k_pressed in po.keys.iteritems():
                 if k_pressed and k in po.input:
                     action = po.input[k][0]
                     arg = po.input[k][1]
                     po.action(action, arg, dt)
                     if po == self.p1:
+                        self.stop_update = True
                         self.p1.send('update')
+                else:
+                    delete_keys.append(k)
+                    if self.stop_update:
+                        self.stop_update = False
+                        self.p1.send('update_stop')
 
-
+            for k in delete_keys:
+                del po.keys[k]
+            
     def displayScore(self):
         """
         Render the score for the players

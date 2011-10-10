@@ -19,8 +19,9 @@ player_list = []
 player_details = {}
 
 while True:
-    time.sleep(0.016)
     
+    time.sleep(0.016)
+
     send(player_details)
 
     try:
@@ -29,11 +30,16 @@ while True:
         pass
     else:
         if msg['cmd'] == 'new':
+            print 'new'
             player = util.unpickle(msg['player'])
             player_details[player.name] = player
         elif msg['cmd'] == 'update':
             player = util.unpickle(msg['player'])
             del player_details[player.name]
             player_details[player.name] = player
-            
+        elif msg['cmd'] == 'update_stop':
+            print 'stop'
+            player = util.unpickle(msg['player'])
+            del player_details[player.name]
+            player_details[player.name] = player
 

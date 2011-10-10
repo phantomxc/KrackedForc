@@ -6,6 +6,15 @@ class miniPlayer(object):
     def __init__(self, name, keys):
 
         self.name = name
+        
+        self.bx = 0
+        self.by = 0
+        self.brot = 0
+        
+        self.tx = 0
+        self.ty = 0
+        self.tbrot = 0
+
         self.health = 100
         self.score = 0
         self.keys = keys

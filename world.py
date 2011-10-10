@@ -132,7 +132,7 @@ class World(object):
         print "Connecting to server ...",
         sys.stdout.flush()
         self.sub_socket.recv()  # Will hang forever if no server.
-        
+        print "Connected" 
         self.push_socket = context.socket(zmq.PUSH) 
         self.push_socket.connect("tcp://localhost:5555") 
 
@@ -140,7 +140,7 @@ class World(object):
 
     def recvServer(self):
         try:
-            msg = self.sub_socket.recv()
+            msg = self.sub_socket.recv(flags=zmq.core.NOBLOCK)
         except zmq.core.error.ZMQError:
             pass
         else:

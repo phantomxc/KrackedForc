@@ -30,7 +30,7 @@ class Bullet(rabbyt.Sprite):
         self.y += a[1]
         
         map_collisions = rabbyt.collisions.aabb_collide_single(self, self.world.map_objects)
-        player_collisions = rabbyt.collisions.aabb_collide_single(self, self.world.player_objects)
+        player_collisions = rabbyt.collisions.aabb_collide_single(self, [player for n, player in self.world.players.items()])
         
         if self.tank in player_collisions:
             player_collisions.remove(self.tank)

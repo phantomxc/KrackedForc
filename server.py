@@ -20,7 +20,7 @@ player_details = {}
 
 while True:
     
-    time.sleep(0.016)
+    time.sleep(0.03)
 
     send(player_details)
 
